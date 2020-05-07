@@ -1,0 +1,30 @@
+{
+  "name": "@justin1dennison/fooks",
+  "version": "1.0.0",
+  "description": "This is a wrapper of functions so that you can create execution hooks.",
+  "main": "src/lib.js",
+  "scripts": {
+    "test": "ava",
+    "format": "prettier --write --no-semi --single-quote src/**/*.js src/*.js *.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/justin1dennison/fooks.git"
+  },
+  "keywords": [
+    "hooks",
+    "functions",
+    "decorator"
+  ],
+  "author": "Justin Dennison",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/justin1dennison/fooks/issues"
+  },
+  "homepage": "https://github.com/justin1dennison/fooks#readme",
+  "devDependencies": {
+    "ava": "^3.8.1",
+    "prettier": "^2.0.5",
+    "sinon": "^9.0.2"
+  }
+}
