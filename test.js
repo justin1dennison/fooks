@@ -2,6 +2,8 @@ const fooks = require('./src/lib')
 const test = require('ava')
 const sinon = require('sinon')
 
+const noop = () => {}
+
 test('the original function is called after being wrapped', (t) => {
   const fn = sinon.spy()
   const wrapped = fooks().wrap(fn)
@@ -11,7 +13,6 @@ test('the original function is called after being wrapped', (t) => {
 
 test('you can register a function to be run before the original function runs', (t) => {
   let count = 1
-  t.plan(4)
   const original = sinon.spy(() => {
     t.is(count, 2)
   })
@@ -27,7 +28,6 @@ test('you can register a function to be run before the original function runs', 
 
 test('you can register a function to be run after the original function runs', (t) => {
   let count = 1
-  t.plan(4)
   const original = sinon.spy(() => {
     t.is(count, 1)
     count += 1
@@ -42,7 +42,6 @@ test('you can register a function to be run after the original function runs', (
 })
 
 test('you can register pre and post functions', (t) => {
-  t.plan(6)
   let count = 1
   const original = sinon.spy(() => {
     t.is(count, 2)
@@ -79,4 +78,44 @@ test('results are returned correctly from the wrapped function', (t) => {
   const result = wrapped(3, 7)
   t.true(original.called)
   t.is(result, 10)
+})
+
+test('pre functions are run in the order they are registered', (t) => {
+  let count = 1
+  const first = sinon.spy(() => {
+    t.is(count, 1)
+    count += 1
+  })
+  const second = sinon.spy(() => {
+    t.is(count, 2)
+    count += 1
+  })
+  const wrapped = fooks()
+    .before(first)
+    .before(second)
+    .wrap(() => {
+      t.is(count, 3)
+    })
+  wrapped()
+  t.true(first.called)
+  t.true(second.called)
+})
+test('post functions are run in the order they are registered', (t) => {
+  let count = 1
+  const first = sinon.spy(() => {
+    t.is(count, 1)
+    count += 1
+  })
+  const second = sinon.spy(() => {
+    t.is(count, 2)
+  })
+  const wrapped = fooks()
+    .after(first)
+    .after(second)
+    .wrap(() => {
+      t.is(count, 1)
+    })
+  wrapped()
+  t.true(first.called)
+  t.true(second.called)
 })
