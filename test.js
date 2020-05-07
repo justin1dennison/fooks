@@ -10,8 +10,15 @@ test('the original function is called after being wrapped', (t) => {
 })
 
 test('you can register a function to be run before the original function runs', (t) => {
-  const original = sinon.spy()
-  const pre = sinon.spy()
+  let count = 1
+  t.plan(4)
+  const original = sinon.spy(() => {
+    t.is(count, 2)
+  })
+  const pre = sinon.spy(() => {
+    t.is(count, 1)
+    count += 1
+  })
   const wrapped = fooks().before(pre).wrap(original)
   wrapped()
   t.true(pre.called)
@@ -19,8 +26,15 @@ test('you can register a function to be run before the original function runs', 
 })
 
 test('you can register a function to be run after the original function runs', (t) => {
-  const original = sinon.spy()
-  const post = sinon.spy()
+  let count = 1
+  t.plan(4)
+  const original = sinon.spy(() => {
+    t.is(count, 1)
+    count += 1
+  })
+  const post = sinon.spy(() => {
+    t.is(count, 2)
+  })
   const wrapped = fooks().after(post).wrap(original)
   wrapped()
   t.true(post.called)
@@ -28,8 +42,21 @@ test('you can register a function to be run after the original function runs', (
 })
 
 test('you can register pre and post functions', (t) => {
-  const original = sinon.spy()
-  const [pre, post] = [sinon.spy(), sinon.spy()]
+  t.plan(6)
+  let count = 1
+  const original = sinon.spy(() => {
+    t.is(count, 2)
+    count += 1
+  })
+  const [pre, post] = [
+    sinon.spy(() => {
+      t.is(count, 1)
+      count += 1
+    }),
+    sinon.spy(() => {
+      t.is(count, 3)
+    }),
+  ]
   const wrapped = fooks().before(pre).after(post).wrap(original)
   wrapped()
   t.true(original.called)
