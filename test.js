@@ -15,4 +15,14 @@ test('you can register a function to be run before the original function runs', 
   const wrapped = fooks().before(pre).wrap(original)
   wrapped()
   t.true(pre.called)
+  t.true(original.called)
+})
+
+test('you can register a function to be run after the original function runs', (t) => {
+	const original = sinon.spy()
+	const post = sinon.spy()
+	const wrapped = fooks().after(post).wrap(original)
+	wrapped()
+	t.true(post.called)
+	t.true(original.called)
 })
