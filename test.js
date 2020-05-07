@@ -100,6 +100,7 @@ test('pre functions are run in the order they are registered', (t) => {
   t.true(first.called)
   t.true(second.called)
 })
+
 test('post functions are run in the order they are registered', (t) => {
   let count = 1
   const first = sinon.spy(() => {
@@ -118,4 +119,22 @@ test('post functions are run in the order they are registered', (t) => {
   wrapped()
   t.true(first.called)
   t.true(second.called)
+})
+
+test('you can register functions as additional arguments to `before` and `after`', (t) => {
+  const afters = [sinon.spy(), sinon.spy()]
+  const befores = [sinon.spy(), sinon.spy()]
+  const wrapped = fooks()
+    .before(...befores)
+    .after(...afters)
+    .wrap(noop)
+  wrapped()
+  t.deepEqual(
+    afters.map((a) => a.called),
+    [true, true]
+  )
+  t.deepEqual(
+    befores.map((b) => b.called),
+    [true, true]
+  )
 })

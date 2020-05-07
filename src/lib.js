@@ -13,14 +13,14 @@ module.exports = function fooks() {
   }
 
   /**TODO: */
-  function before(fn) {
-    befores.push(fn)
+  function before(...fns) {
+    befores.push(...fns)
     return this
   }
 
   /**TODO: */
-  function after(fn) {
-    afters.push(fn)
+  function after(...fns) {
+    afters.push(...fns)
     return this
   }
 
