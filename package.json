@@ -4,7 +4,7 @@
   "description": "This is a wrapper of functions so that you can create execution hooks.",
   "main": "src/lib.js",
   "scripts": {
-    "test": "ava",
+    "test": "nyc ava",
     "format": "prettier --write --no-semi --single-quote src/**/*.js src/*.js *.js"
   },
   "repository": {
@@ -24,6 +24,7 @@
   "homepage": "https://github.com/justin1dennison/fooks#readme",
   "devDependencies": {
     "ava": "^3.8.1",
+    "nyc": "^15.0.1",
     "prettier": "^2.0.5",
     "sinon": "^9.0.2"
   }
