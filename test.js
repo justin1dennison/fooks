@@ -8,3 +8,11 @@ test('the original function is called after being wrapped', (t) => {
   wrapped()
   t.true(fn.called)
 })
+
+test('you can register a function to be run before the original function runs', (t) => {
+  const original = sinon.spy()
+  const pre = sinon.spy()
+  const wrapped = fooks().before(pre).wrap(original)
+  wrapped()
+  t.true(pre.called)
+})

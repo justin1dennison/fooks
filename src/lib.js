@@ -1,5 +1,15 @@
 module.exports = function fooks() {
-  const wrap = (fn) => (...args) => fn(...args)
+  const befores = []
+  function wrap(fn) {
+    return function wrapped(...args) {
+      befores.forEach(f => f(...args))
+      return fn(...args)
+    }
+  }
+  function before(fn) {
+    befores.push(fn)
+    return this
+  }
 
-  return { wrap }
+  return { wrap, before }
 }
