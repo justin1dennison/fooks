@@ -19,10 +19,37 @@ test('you can register a function to be run before the original function runs', 
 })
 
 test('you can register a function to be run after the original function runs', (t) => {
-	const original = sinon.spy()
-	const post = sinon.spy()
-	const wrapped = fooks().after(post).wrap(original)
-	wrapped()
-	t.true(post.called)
-	t.true(original.called)
+  const original = sinon.spy()
+  const post = sinon.spy()
+  const wrapped = fooks().after(post).wrap(original)
+  wrapped()
+  t.true(post.called)
+  t.true(original.called)
+})
+
+test('you can register pre and post functions', (t) => {
+  const original = sinon.spy()
+  const [pre, post] = [sinon.spy(), sinon.spy()]
+  const wrapped = fooks().before(pre).after(post).wrap(original)
+  wrapped()
+  t.true(original.called)
+  t.true(pre.called)
+  t.true(post.called)
+})
+
+test('the wrapped function can take the same number of arguments as the original function', (t) => {
+  const original = sinon.spy((x, y) => x + y)
+  const wrapped = fooks().wrap(original)
+  wrapped(1, 2)
+  t.true(original.called)
+})
+
+test('results are returned correctly from the wrapped function', (t) => {
+  const add = (x, y) => x + y
+  const original = sinon.spy(add)
+  const [pre, post] = [sinon.spy(), sinon.spy()]
+  const wrapped = fooks().before(pre).after(post).wrap(original)
+  const result = wrapped(3, 7)
+  t.true(original.called)
+  t.is(result, 10)
 })

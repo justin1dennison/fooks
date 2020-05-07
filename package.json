@@ -5,6 +5,7 @@
   "main": "src/lib.js",
   "scripts": {
     "test": "nyc ava",
+    "pretest": "npm run format",
     "format": "prettier --write --no-semi --single-quote src/**/*.js src/*.js *.js"
   },
   "repository": {
